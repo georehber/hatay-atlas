@@ -343,6 +343,52 @@
       height: 18px;
       fill: currentColor;
     }
+
+    /* Mobil için tamamen tam ekran (Uygulama görünümü) */
+    @media (max-width: 768px) {
+      body {
+        overflow: hidden; /* Sayfa kaydırmasını engelle */
+      }
+      
+      .navbar,
+      .hero-section,
+      .footer,
+      .fullscreen-btn {
+        display: none !important; /* Başlık, menü, footer ve tam ekran butonunu gizle */
+      }
+      
+      .embed-wrapper {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100vw;
+        height: 100vh;
+        height: 100dvh; /* iOS Safari araç çubuğu için dinamik yükseklik */
+        max-width: 100%;
+        animation: none;
+        opacity: 1;
+        transform: none;
+        flex: unset;
+      }
+      
+      .iframe-container {
+        height: 100%;
+        width: 100%;
+        min-height: unset;
+        border-radius: 0;
+        padding: 0;
+        background: none;
+        box-shadow: none;
+      }
+      
+      .iframe-container:hover {
+        transform: none;
+        box-shadow: none;
+      }
+      
+      .iframe-inner {
+        border-radius: 0;
+      }
+    }
   </style>
 </head>
 

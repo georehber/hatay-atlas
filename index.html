@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hatay Turizm Atlası</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-color: #050505;
+      --surface-color: rgba(20, 20, 22, 0.7);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --primary: #8b5cf6; /* Vibrant purple */
+      --primary-glow: rgba(139, 92, 246, 0.4);
+      --secondary: #3b82f6; /* Vibrant blue */
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      
+      --card: oklch(0.12 0.01 0);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Ambient Background Gradients */
+    body::before, body::after {
+      content: '';
+      position: fixed;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      filter: blur(120px);
+      z-index: -1;
+      opacity: 0.4;
+      pointer-events: none;
+      animation: float 20s infinite ease-in-out alternate;
+    }
+    body::before {
+      background: radial-gradient(circle, var(--primary), transparent 70%);
+      top: -200px;
+      left: -200px;
+    }
+    body::after {
+      background: radial-gradient(circle, var(--secondary), transparent 70%);
+      bottom: -100px;
+      right: -200px;
+      animation-delay: -10s;
+    }
+
+    @keyframes float {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(50px, 50px) scale(1.1); }
+    }
+
+    /* Glass Navbar */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      padding: 1.25rem 2rem;
+      background: var(--surface-color);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--glass-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-brand {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    
+    .nav-brand svg {
+      width: 24px;
+      height: 24px;
+      fill: none;
+      stroke: url(#brand-gradient);
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      border-radius: 99px;
+      transition: all 0.3s ease;
+      background: transparent;
+    }
+    
+    .nav-links a:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    /* Main Embed Container */
+    .hero-section {
+      padding: 3rem 2rem;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .hero-subtitle {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto 2rem auto;
+      line-height: 1.6;
+    }
+
+    .embed-wrapper {
+      flex: 1;
+      width: 100%;
+      max-width: 1600px;
+      margin: 0 auto 4rem auto;
+      padding: 0 2rem;
+      display: flex;
+      flex-direction: column;
+      animation: fadeUp 1s ease-out forwards;
+      opacity: 0;
+      transform: translateY(20px);
+      z-index: 2;
+      position: relative;
+    }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .iframe-container {
+      position: relative;
+      width: 100%;
+      height: 75vh;
+      min-height: 600px;
+      border-radius: 24px;
+      padding: 6px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02));
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5), 0 0 40px var(--primary-glow);
+      backdrop-filter: blur(10px);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .iframe-container:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 30px 60px -12px rgba(0,0,0,0.6), 0 0 60px var(--primary-glow);
+    }
+
+    .iframe-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 18px;
+      overflow: hidden;
+      background: #000;
+      position: relative;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Loader inside iframe container just for visual effect before load */
+    .loader {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 48px;
+      height: 48px;
+      border: 4px solid var(--glass-border);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      z-index: 1; 
+    }
+
+    @keyframes spin { 100% { transform: translate(-50%, -50%) rotate(360deg); } }
+
+    /* Footer - Exact Match from Georehber, enhanced for dark modern theme */
+    .footer {
+      background-color: var(--card);
+      border-top: 1px solid var(--glass-border);
+      padding: 3rem 0 2rem 0;
+      margin-top: auto;
+      z-index: 10;
+      position: relative;
+    }
+
+    .footer-container {
+      width: 100%;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .footer-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+      text-align: center;
+    }
+
+    @media (min-width: 768px) {
+      .footer-content {
+        flex-direction: row;
+        justify-content: space-between;
+      }
+    }
+
+    .footer-text {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .footer-links a {
+      color: var(--text-muted);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.5rem;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.03);
+    }
+
+    .footer-links a:hover {
+      color: #fff;
+      background: var(--primary);
+      transform: translateY(-3px);
+      box-shadow: 0 4px 12px var(--primary-glow);
+    }
+
+    .footer-links svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+    
+    .footer-links .stroke-icon {
+      fill: none;
+      stroke: currentColor;
+    }
+
+    .fullscreen-btn {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      z-index: 20;
+      background: var(--surface-color);
+      border: 1px solid var(--glass-border);
+      color: var(--text-main);
+      padding: 0.6rem 1.2rem;
+      border-radius: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 500;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+    
+    .fullscreen-btn:hover {
+      background: var(--primary);
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px var(--primary-glow);
+    }
+    
+    .fullscreen-btn svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+  </style>
+</head>
+
+<body>
+
+  <svg style="width:0;height:0;position:absolute;" aria-hidden="true" focusable="false">
+    <linearGradient id="brand-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff" />
+      <stop offset="100%" stop-color="#a5b4fc" />
+    </linearGradient>
+  </svg>
+
+  <nav class="navbar">
+    <div class="nav-brand">
+      <svg viewBox="0 0 24 24">
+        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Georehber
+    </div>
+  </nav>
+
+  <section class="hero-section">
+    <h1 class="hero-title">Hatay Turizm Atlası</h1>
+  </section>
+
+  <div class="embed-wrapper">
+    <div class="iframe-container">
+      <div class="iframe-inner">
+        <div class="loader"></div>
+        <button class="fullscreen-btn" onclick="toggleFullscreen()" title="Tam Ekran Yap">
+          <svg viewBox="0 0 24 24">
+            <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
+          </svg>
+          Tam Ekran
+        </button>
+        <iframe id="mapIframe"
+            src="https://experience.arcgis.com/experience/1cfef1310464485fb7ac100334c3a55b/"
+            allowfullscreen>
+        </iframe>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+      <div class="footer-container">
+          <div class="footer-content">
+              <p class="footer-text">© 2026 Mehmet Ali Yanmaz. Tüm hakları saklıdır.</p>
+              <div class="footer-links">
+                  <a href="https://linkedin.com/in/mehmetaliyanmaz" target="_blank" title="LinkedIn">
+                      <svg viewBox="0 0 24 24">
+                          <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z" />
+                          <circle cx="4" cy="4" r="2" />
+                      </svg>
+                  </a>
+                  <a href="https://www.instagram.com/georehber" target="_blank" title="Instagram">
+                      <svg class="stroke-icon" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                          <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                          <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                      </svg>
+                  </a>
+                  <a href="https://www.youtube.com/@georehber1/" target="_blank" title="YouTube">
+                      <svg class="stroke-icon" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
+                          <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
+                      </svg>
+                  </a>
+                  <a href="https://wa.me/905316066176" target="_blank" title="WhatsApp">
+                      <svg class="stroke-icon" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                      </svg>
+                  </a>
+                  <a href="mailto:georehber01@gmail.com" title="E-posta">
+                      <svg class="stroke-icon" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <rect x="2" y="4" width="20" height="16" rx="2" />
+                          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                      </svg>
+                  </a>
+              </div>
+          </div>
+      </div>
+  </footer>
+
+  <script>
+    function toggleFullscreen() {
+      const iframe = document.getElementById('mapIframe');
+      if (!document.fullscreenElement) {
+        if (iframe.requestFullscreen) {
+          iframe.requestFullscreen();
+        } else if (iframe.webkitRequestFullscreen) { /* Safari */
+          iframe.webkitRequestFullscreen();
+        } else if (iframe.msRequestFullscreen) { /* IE11 */
+          iframe.msRequestFullscreen();
+        }
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) { /* Safari */
+          document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) { /* IE11 */
+          document.msExitFullscreen();
+        }
+      }
+    }
+  </script>
+</body>
+</html>

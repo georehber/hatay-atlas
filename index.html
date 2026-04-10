@@ -200,6 +200,26 @@
       z-index: 2;
     }
 
+    /* Fullscreen Fallback for Mobile (iOS Safari vb.) */
+    .iframe-container.is-fullscreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      z-index: 99999;
+      padding: 0;
+      border-radius: 0;
+      margin: 0;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    .iframe-container.is-fullscreen .iframe-inner {
+      border-radius: 0;
+    }
+
     /* Loader inside iframe container just for visual effect before load */
     .loader {
       position: absolute;
@@ -408,23 +428,43 @@
 
   <script>
     function toggleFullscreen() {
+      const container = document.querySelector('.iframe-container');
       const iframe = document.getElementById('mapIframe');
-      if (!document.fullscreenElement) {
-        if (iframe.requestFullscreen) {
-          iframe.requestFullscreen();
-        } else if (iframe.webkitRequestFullscreen) { /* Safari */
-          iframe.webkitRequestFullscreen();
-        } else if (iframe.msRequestFullscreen) { /* IE11 */
-          iframe.msRequestFullscreen();
-        }
-      } else {
+      
+      const isNativeFullscreen = document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
+      const isCssFullscreen = container.classList.contains('is-fullscreen');
+
+      if (isCssFullscreen) {
+        container.classList.remove('is-fullscreen');
+        document.body.style.overflow = '';
+        return;
+      }
+
+      if (isNativeFullscreen) {
         if (document.exitFullscreen) {
           document.exitFullscreen();
-        } else if (document.webkitExitFullscreen) { /* Safari */
+        } else if (document.webkitExitFullscreen) {
           document.webkitExitFullscreen();
-        } else if (document.msExitFullscreen) { /* IE11 */
+        } else if (document.msExitFullscreen) {
           document.msExitFullscreen();
         }
+        return;
+      }
+
+      if (container.requestFullscreen) {
+        container.requestFullscreen().catch(() => enableCssFullscreen());
+      } else if (container.webkitRequestFullscreen) {
+        container.webkitRequestFullscreen();
+      } else if (container.msRequestFullscreen) {
+        container.msRequestFullscreen();
+      } else {
+        // Fallback for iOS Safari (iPhone) and others without native Fullscreen API
+        enableCssFullscreen();
+      }
+
+      function enableCssFullscreen() {
+        container.classList.add('is-fullscreen');
+        document.body.style.overflow = 'hidden';
       }
     }
   </script>

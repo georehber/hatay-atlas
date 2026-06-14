@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800;900&display=swap"
     rel="stylesheet">
 
   <style>
@@ -100,9 +100,10 @@
     }
 
     .nav-brand {
-      font-family: 'Outfit', sans-serif;
-      font-size: 1.5rem;
-      font-weight: 700;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 2.25rem;
+      font-weight: 900;
+      text-transform: uppercase;
       letter-spacing: -0.02em;
       background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
       -webkit-background-clip: text;
@@ -110,13 +111,32 @@
       display: flex;
       align-items: center;
       gap: 0.75rem;
+      text-decoration: none;
+      transition: opacity 0.3s ease;
     }
 
-    .nav-brand svg {
-      width: 24px;
-      height: 24px;
-      fill: none;
-      stroke: url(#brand-gradient);
+    .nav-brand:hover {
+      opacity: 0.8;
+    }
+
+    .nav-logo {
+      height: 4rem;
+      width: auto;
+      object-fit: contain;
+      transition: transform 0.3s ease;
+    }
+
+    .nav-brand:hover .nav-logo {
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 768px) {
+      .nav-brand {
+        font-size: 1.5rem;
+      }
+      .nav-logo {
+        height: 3rem;
+      }
     }
 
     .nav-links a {
@@ -417,21 +437,11 @@
 
 <body>
 
-  <svg style="width:0;height:0;position:absolute;" aria-hidden="true" focusable="false">
-    <linearGradient id="brand-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#fff" />
-      <stop offset="100%" stop-color="#a5b4fc" />
-    </linearGradient>
-  </svg>
-
   <nav class="navbar">
-    <div class="nav-brand">
-      <svg viewBox="0 0 24 24">
-        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke-width="2" stroke-linecap="round"
-          stroke-linejoin="round" />
-      </svg>
-      Georehber
-    </div>
+    <a href="https://georehber.com" class="nav-brand" target="_blank" rel="noopener noreferrer">
+      <img src="favicon.png" alt="Georehber Logo" class="nav-logo">
+      GEOREHBER
+    </a>
   </nav>
 
   <section class="hero-section">
@@ -474,7 +484,7 @@
               <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
             </svg>
           </a>
-          <a href="https://www.youtube.com/@georehber1/" target="_blank" title="YouTube">
+          <a href="https://www.youtube.com/@georehber/" target="_blank" title="YouTube">
             <svg class="stroke-icon" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round"
               stroke-linejoin="round">
               <path
